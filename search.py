@@ -1,5 +1,15 @@
 import heapq
 
+# Representação dos tipos de células e custos
+CUSTO_VAZIO = 1
+CUSTO_LAMA = 5
+OBSTACULO = '#'
+TESOURO = 'T'
+
+# Define os movimentos possíveis: (linha, coluna)
+MOVIMENTOS = [(-1, 0), (1, 0), (0, -1), (0, 1)]  # Cima, baixo, esquerda, direita
+
+
 def heuristica_manhattan(posicao_atual, tesouro):
     """Calcula a heurística de Manhattan entre a posição atual e o tesouro."""
     return abs(posicao_atual[0] - tesouro[0]) + abs(posicao_atual[1] - tesouro[1])
