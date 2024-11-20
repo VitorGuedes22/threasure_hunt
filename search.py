@@ -105,15 +105,21 @@ def busca_gulosa(mapa, inicio, tesouro):
 
 def busca_a_estrela(mapa, inicio, tesouro):
     # Fila de prioridade: (f(n), posição, custo atual, caminho percorrido)
-    fila = [(heuristica_manhattan(inicio, tesouro), inicio, 0, [inicio])]
+    fila = [(heuristica_manhattan(inicio, tesouro), 0, inicio, [inicio])]
+    visitados = {}  # Armazena o menor custo para cada posição visitada
 
     while fila:
         # Retira o nó com o menor custo total estimado (f(n) = g(n) + h(n))
-        _, (linha, coluna), custo_atual, caminho = heapq.heappop(fila)
+        custo_total_estimado, custo_atual, (linha, coluna), caminho = heapq.heappop(fila)
 
         # Se encontramos o tesouro, retorna o caminho
         if (linha, coluna) == tesouro:
             return caminho
+
+        # Se a posição já foi visitada com um custo menor ou igual, ignora
+        if (linha, coluna) in visitados and visitados[(linha, coluna)] <= custo_atual:
+            continue
+        visitados[(linha, coluna)] = custo_atual
 
         # Explora vizinhos
         for movimento in MOVIMENTOS:
@@ -135,7 +141,7 @@ def busca_a_estrela(mapa, inicio, tesouro):
                 novo_caminho = caminho + [(nova_linha, nova_coluna)]
 
                 # Adiciona a nova posição à fila com o custo total estimado
-                heapq.heappush(fila, (custo_total_estimado, (nova_linha, nova_coluna), novo_custo, novo_caminho))
+                heapq.heappush(fila, (custo_total_estimado, novo_custo, (nova_linha, nova_coluna), novo_caminho))
 
     # Retorna um array vazio se não houver caminho possível
     return []
